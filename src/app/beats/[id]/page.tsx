@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { getBeatById } from "@/data/beats";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -19,11 +20,12 @@ import {
 } from "@heroicons/react/24/outline";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function BeatDetailPage({ params }: PageProps) {
-  const beat = getBeatById(params.id);
+  const { id } = use(params);
+  const beat = getBeatById(id);
   const hydrated = useHydrated();
   const { addItem, isInCart } = useCartStore();
   const inCart = hydrated && beat ? isInCart(beat.id) : false;
